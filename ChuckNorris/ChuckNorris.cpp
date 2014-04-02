@@ -2,31 +2,38 @@
 //
 
 #include "stdafx.h"
-#include "json.h"
+#include "ChuckJason.h"
+#include "ChuckSocket.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	string address = "127.0.0.1";
 
-	TCPSocket sock;
-
-	sock.connect("127.0.0.1", 50100);
-
-	Json::Value root;
-	root["name"] = "Chuck N0rr1s";
-
-	Json::StyledWriter writer;
-	string nameJson = writer.write(root);
-
-	sock.send(nameJson.c_str(), nameJson.length());
+	ChuckSocket* p1Socket = new ChuckSocket("127.0.0.1", 50100);
+	ChuckSocket* p2Socket = new ChuckSocket("127.0.0.1", 50200);
 	
-	char buffer[256];
+	p1Socket->Connect();
+	p2Socket->Connect();
 
+	if(!p1Socket->IsConnected() || !p2Socket->IsConnected())
+	{
+		printf("Erro ao conectar!");
+		exit(0);
+	}
+
+	string nameJson = ChuckJason::GetNameJson("Chuck N0rr15");
+	p1Socket->Send(nameJson);
+
+	nameJson = ChuckJason::GetNameJson("Bozo");
+	p2Socket->Send(nameJson);
+
+	char buffer[1024];
 	while(1)
 	{
-		sock.recv(buffer, sizeof(buffer));
+		int bytesReceived = p1Socket->Receive(buffer, sizeof(buffer));
 
-		printf(buffer);
+		buffer[bytesReceived] = '\0';
+
+		printf("%s\n\n", buffer);
 	}
 	
 

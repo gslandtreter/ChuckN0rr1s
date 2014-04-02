@@ -66,6 +66,12 @@
     <ClInclude Include="..\json\src\json_batchallocator.h">
       <Filter>json</Filter>
     </ClInclude>
+    <ClInclude Include="ChuckJason.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChuckSocket.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -85,6 +91,12 @@
     </ClCompile>
     <ClCompile Include="..\json\src\json_writer.cpp">
       <Filter>json</Filter>
+    </ClCompile>
+    <ClCompile Include="ChuckJason.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChuckSocket.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
