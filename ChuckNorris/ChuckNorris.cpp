@@ -2,7 +2,7 @@
 //
 
 #include "stdafx.h"
-#include "ChuckJason.h"
+#include "ChuckJson.h"
 #include "ChuckSocket.h"
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -20,10 +20,10 @@ int _tmain(int argc, _TCHAR* argv[])
 		exit(0);
 	}
 
-	string nameJson = ChuckJason::GetNameJson("Chuck N0rr15");
+	string nameJson = ChuckJson::GetNameJson("Chuck N0rr15");
 	p1Socket->Send(nameJson);
 
-	nameJson = ChuckJason::GetNameJson("Bozo");
+	nameJson = ChuckJson::GetNameJson("Bozo");
 	p2Socket->Send(nameJson);
 
 	char buffer[1024];
@@ -31,9 +31,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	{
 		int bytesReceived = p1Socket->Receive(buffer, sizeof(buffer));
 
-		buffer[bytesReceived] = '\0';
-
-		printf("%s\n\n", buffer);
+		GameState* state = ChuckJson::ParseGameState(buffer);
+		state->Print();
 	}
 	
 

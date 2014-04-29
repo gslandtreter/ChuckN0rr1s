@@ -66,10 +66,13 @@
     <ClInclude Include="..\json\src\json_batchallocator.h">
       <Filter>json</Filter>
     </ClInclude>
-    <ClInclude Include="ChuckJason.h">
+    <ClInclude Include="ChuckSocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ChuckSocket.h">
+    <ClInclude Include="ChuckJson.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -92,10 +95,13 @@
     <ClCompile Include="..\json\src\json_writer.cpp">
       <Filter>json</Filter>
     </ClCompile>
-    <ClCompile Include="ChuckJason.cpp">
+    <ClCompile Include="ChuckSocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ChuckSocket.cpp">
+    <ClCompile Include="ChuckJson.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

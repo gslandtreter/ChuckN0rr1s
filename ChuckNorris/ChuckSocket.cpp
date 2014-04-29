@@ -61,6 +61,10 @@ int ChuckSocket::Receive( void *buffer, int bufferLenght )
 	try
 	{
 		int bytesRead = socket.recv(buffer, bufferLenght);
+
+		if(bytesRead > 0)
+			((char *)buffer)[bytesRead] = '\0';
+
 		return bytesRead;
 	}
 	catch (SocketException e)
