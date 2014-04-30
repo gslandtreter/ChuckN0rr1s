@@ -1,5 +1,6 @@
 #include "MoveGenerator.h"
 
+
 MoveGenerator::MoveGenerator(void)
 {
 }
@@ -36,20 +37,23 @@ vector<bitBoard_t>* MoveGenerator::GetWhitePawns( BitBoard* currentState )
 	return returnList;
 }
 
-vector<BitBoard*>* MoveGenerator::GeneratePawnMovements( BitBoard* currentState, bitBoard_t pawn )
+vector<Play*>* MoveGenerator::GeneratePawnMovements( BitBoard* currentState, bitBoard_t pawn )
 {
 	if(!currentState || !pawn)
 		return NULL;
 
-	vector<BitBoard*>* returnList = new vector<BitBoard*>();
+	vector<Play*>* returnList = new vector<Play*>();
 
 	bitBoard_t pawnForward = BitBoard::GoNorth(pawn) & currentState->emptySpaces;
 	bitBoard_t pawnNorthEast = BitBoard::GoNorthEast(pawn) & currentState->blackPieces;
 	bitBoard_t pawnNorthWest = BitBoard::GoNorthWest(pawn) & currentState->blackPieces;
 
+	Coordinate pawnCoordinate = BitBoard::GetPieceCoordinate(pawn);
+
 	//TODO: Double forward when first move.
 	if(pawnForward) //No one is obstructing pawn! Go Forward!!!
 	{
+		Play* newPlay = new Play();
 		BitBoard* newState = new BitBoard();
 
 		newState->whiteRooks = currentState->whiteRooks;
@@ -61,11 +65,17 @@ vector<BitBoard*>* MoveGenerator::GeneratePawnMovements( BitBoard* currentState,
 		newState->blackRooks = currentState->blackRooks;
 
 		newState->CalculateRelativeBitBoards();
-		returnList->push_back(newState);
+
+		newPlay->origin = pawnCoordinate;
+		newPlay->destination = BitBoard::GetPieceCoordinate(pawnForward);
+		newPlay->playBitBoard = newState;
+
+		returnList->push_back(newPlay);
 	}
 
 	if(pawnNorthEast) //Theres a black piece northeast, go get it!
 	{
+		Play* newPlay = new Play();
 		BitBoard* newState = new BitBoard();
 
 		newState->whiteRooks = currentState->whiteRooks;
@@ -77,11 +87,17 @@ vector<BitBoard*>* MoveGenerator::GeneratePawnMovements( BitBoard* currentState,
 		newState->blackRooks = currentState->blackRooks ^ pawnNorthEast;
 
 		newState->CalculateRelativeBitBoards();
-		returnList->push_back(newState);
+
+		newPlay->origin = pawnCoordinate;
+		newPlay->destination = BitBoard::GetPieceCoordinate(pawnNorthEast);
+		newPlay->playBitBoard = newState;
+
+		returnList->push_back(newPlay);
 	}
 
 	if(pawnNorthWest) //Theres a black piece northwest, go get it!
 	{
+		Play* newPlay = new Play();
 		BitBoard* newState = new BitBoard();
 
 		newState->whiteRooks = currentState->whiteRooks;
@@ -93,7 +109,12 @@ vector<BitBoard*>* MoveGenerator::GeneratePawnMovements( BitBoard* currentState,
 		newState->blackRooks = currentState->blackRooks ^ pawnNorthWest;
 
 		newState->CalculateRelativeBitBoards();
-		returnList->push_back(newState);
+
+		newPlay->origin = pawnCoordinate;
+		newPlay->destination = BitBoard::GetPieceCoordinate(pawnNorthWest);
+		newPlay->playBitBoard = newState;
+
+		returnList->push_back(newPlay);
 	}
 
 	return returnList;

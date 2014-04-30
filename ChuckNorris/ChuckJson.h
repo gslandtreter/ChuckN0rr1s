@@ -3,6 +3,7 @@
 #include "json.h"
 #include <string>
 #include "GameState.h"
+#include "Play.h"
 
 using namespace std;
 
@@ -14,6 +15,7 @@ public:
 
 	static string GetNameJson( string name );
 	static GameState* ParseGameState(string gameStateJson);
+	static string GetPlayJson( Play* play );
 
 };
 

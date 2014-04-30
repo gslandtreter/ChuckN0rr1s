@@ -63,6 +63,27 @@ void BitBoard::PrintBitBoard( bitBoard_t bitBoard )
 	//Bad code, works for debuggin'.
 }
 
+Coordinate BitBoard::GetPieceCoordinate( bitBoard_t bitBoard )
+{
+	bitBoard_t copy = bitBoard;
+	bitBoard_t set = 0;
+
+	int row = 0, column = 0;
+	for (int i = 0; i < 64; i++)
+	{
+		set = copy & 1;
+		copy >>= 1;
+
+		if(set)
+		{
+			row = (64 - i - 1) / 8;
+			column = i % 8;
+			break;
+		}	
+	}
+	return Coordinate(row, column);
+}
+
 BitBoard* BitBoard::Generate( GameState* gameState )
 {
 	if(!gameState)
@@ -73,32 +94,32 @@ BitBoard* BitBoard::Generate( GameState* gameState )
 	const char* boardString = gameState->board.c_str();
 	
 	//Begin filling bitboard
-	for(int i = 0; i < 64; i++)
+	for(int i = 64; i > 0; i--)
 	{
 		switch(boardString[i])
 		{
-		case 'p':
+		case 'P':
 			newBitBoard->whitePawns += 1;
 			break;
-		case 'r':
+		case 'R':
 			newBitBoard->whiteRooks += 1;
 			break;
-		case 'b':
+		case 'B':
 			newBitBoard->whiteBishops += 1;
 			break;
 
-		case 'P':
+		case 'p':
 			newBitBoard->blackPawns += 1;
 			break;
-		case 'R':
+		case 'r':
 			newBitBoard->blackRooks += 1;
 			break;
-		case 'B':
+		case 'b':
 			newBitBoard->blackBishops += 1;
 			break;
 		}
 
-		if(i < 63)
+		if(i > 0)
 		{
 			//Shift them bitboards dude
 			newBitBoard->whitePawns <<= 1;
@@ -125,5 +146,7 @@ void BitBoard::CalculateRelativeBitBoards()
 
 	this->emptySpaces = UNIVERSE ^ this->fullBoard;
 }
+
+
 
 

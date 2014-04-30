@@ -103,6 +103,7 @@
     <ClInclude Include="ChuckSocket.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="MoveGenerator.h" />
+    <ClInclude Include="Play.h" />
     <ClInclude Include="PracticalSocket.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
@@ -120,6 +121,7 @@
     <ClCompile Include="ChuckSocket.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="MoveGenerator.cpp" />
+    <ClCompile Include="Play.cpp" />
     <ClCompile Include="PracticalSocket.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
