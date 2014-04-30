@@ -4,10 +4,10 @@
 #include "stdafx.h"
 #include "ChuckJson.h"
 #include "ChuckSocket.h"
+#include "BitBoard.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-
 	ChuckSocket* p1Socket = new ChuckSocket("127.0.0.1", 50100);
 	ChuckSocket* p2Socket = new ChuckSocket("127.0.0.1", 50200);
 	
@@ -33,6 +33,8 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		GameState* state = ChuckJson::ParseGameState(buffer);
 		state->Print();
+
+		BitBoard* boardState = BitBoard::Generate(state);
 	}
 	
 

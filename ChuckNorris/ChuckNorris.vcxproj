@@ -98,6 +98,7 @@
     <ClInclude Include="..\json\include\value.h" />
     <ClInclude Include="..\json\include\writer.h" />
     <ClInclude Include="..\json\src\json_batchallocator.h" />
+    <ClInclude Include="BitBoard.h" />
     <ClInclude Include="ChuckJson.h" />
     <ClInclude Include="ChuckSocket.h" />
     <ClInclude Include="GameState.h" />
@@ -108,6 +109,7 @@
     <ClCompile Include="..\json\src\json_reader.cpp" />
     <ClCompile Include="..\json\src\json_value.cpp" />
     <ClCompile Include="..\json\src\json_writer.cpp" />
+    <ClCompile Include="BitBoard.cpp" />
     <ClCompile Include="ChuckJson.cpp" />
     <ClCompile Include="ChuckNorris.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
