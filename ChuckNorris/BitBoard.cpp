@@ -1,5 +1,5 @@
 #include "BitBoard.h"
-
+#include "MoveGenerator.h"
 
 BitBoard::BitBoard(void)
 {
@@ -20,6 +20,27 @@ BitBoard::BitBoard(void)
 
 BitBoard::~BitBoard(void)
 {
+}
+
+
+bitBoard_t BitBoard::GoNorth( bitBoard_t currentBitBoard )
+{
+	return currentBitBoard >> 8;
+}
+
+bitBoard_t BitBoard::GoSouth( bitBoard_t currentBitBoard )
+{
+	return currentBitBoard << 8;
+}
+
+bitBoard_t BitBoard::GoNorthWest( bitBoard_t currentBitBoard )
+{
+	return (currentBitBoard >> 9) & notHFile;
+}
+
+bitBoard_t BitBoard::GoNorthEast( bitBoard_t currentBitBoard )
+{
+	return (currentBitBoard >> 7) & notAFile;
 }
 
 void BitBoard::PrintBitBoard( bitBoard_t bitBoard )
@@ -90,14 +111,19 @@ BitBoard* BitBoard::Generate( GameState* gameState )
 		}
 	}
 
-	//Bitwise OR operator FTW.
-	newBitBoard->whitePieces = newBitBoard->whitePawns | newBitBoard->whiteRooks | newBitBoard->whiteBishops;
-	newBitBoard->blackPieces = newBitBoard->blackPawns | newBitBoard->blackRooks | newBitBoard->blackBishops;
-
-	newBitBoard->fullBoard = newBitBoard->whitePieces | newBitBoard->blackPieces;
-
-	newBitBoard->emptySpaces = UNIVERSE ^ newBitBoard->fullBoard;
-
-	//TODO: TURN DAT DEBUG OFF!
-	BitBoard::PrintBitBoard(newBitBoard->emptySpaces);
+	newBitBoard->CalculateRelativeBitBoards();
+	return newBitBoard;
 }
+
+void BitBoard::CalculateRelativeBitBoards()
+{
+	//Bitwise OR operator FTW.
+	this->whitePieces = this->whitePawns | this->whiteRooks | this->whiteBishops;
+	this->blackPieces = this->blackPawns | this->blackRooks | this->blackBishops;
+
+	this->fullBoard = this->whitePieces | this->blackPieces;
+
+	this->emptySpaces = UNIVERSE ^ this->fullBoard;
+}
+
+

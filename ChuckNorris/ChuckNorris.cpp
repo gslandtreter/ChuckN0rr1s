@@ -5,6 +5,7 @@
 #include "ChuckJson.h"
 #include "ChuckSocket.h"
 #include "BitBoard.h"
+#include "MoveGenerator.h"
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -35,6 +36,23 @@ int _tmain(int argc, _TCHAR* argv[])
 		state->Print();
 
 		BitBoard* boardState = BitBoard::Generate(state);
+
+		//TODO: TURN DAT DEBUG OFF!
+		BitBoard::PrintBitBoard(boardState->fullBoard);
+
+
+		vector<bitBoard_t>* gotWhitePawns = MoveGenerator::GetWhitePawns(boardState);
+
+		for(int i = 0; i < gotWhitePawns->size(); i++)
+		{
+			vector<BitBoard*>* newStates = MoveGenerator::GeneratePawnMovements(boardState, (*gotWhitePawns)[i]);
+
+			for(int n = 0; n < newStates->size(); n++)
+			{
+				BitBoard* generatedMovement = (*newStates)[n];
+				BitBoard::PrintBitBoard(generatedMovement->fullBoard);
+			}
+		}
 	}
 	
 
