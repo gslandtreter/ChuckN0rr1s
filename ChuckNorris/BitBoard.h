@@ -26,6 +26,7 @@ public:
 	bitBoard_t blackPieces;
 
 	bitBoard_t fullBoard;
+	bitBoard_t emptySpaces;
 
 	BitBoard(void);
 	~BitBoard(void);

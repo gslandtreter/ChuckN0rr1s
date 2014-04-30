@@ -14,6 +14,7 @@ BitBoard::BitBoard(void)
 	this->blackPieces = 0;
 
 	this->fullBoard = 0;
+	this->emptySpaces = UNIVERSE;
 }
 
 
@@ -26,25 +27,15 @@ void BitBoard::PrintBitBoard( bitBoard_t bitBoard )
 	bitBoard_t copy = bitBoard;
 	bitBoard_t set = 0;
 
-	char result[65];
-
 	for (int i = 0; i < 64; i++)
 	{
 		set = copy & 1;
 		copy >>= 1;
 
-		result[i] = set ? '1' : '0';
-		
-	}
-
-	result[64] = '\0';
-
-	for (int i = 0; i < 64; i++)
-	{
 		if((i % 8) == 0)
 			printf("\n");
 
-		printf("%c", result[i]);
+		printf("%d", set);
 	}
 
 	printf("\n");
@@ -105,6 +96,8 @@ BitBoard* BitBoard::Generate( GameState* gameState )
 
 	newBitBoard->fullBoard = newBitBoard->whitePieces | newBitBoard->blackPieces;
 
+	newBitBoard->emptySpaces = UNIVERSE ^ newBitBoard->fullBoard;
+
 	//TODO: TURN DAT DEBUG OFF!
-	BitBoard::PrintBitBoard(newBitBoard->fullBoard);
+	BitBoard::PrintBitBoard(newBitBoard->emptySpaces);
 }
