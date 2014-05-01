@@ -9,10 +9,11 @@
 #include "MoveGenerator.h"
 #include "Play.h"
 
-int _tmain(int argc, _TCHAR* argv[])
+int main(int argc, char* argv[])
 {
 
 	
+
 	/*bitBoard_t teste = 17592186044416 << 14;
 
 	BitBoard::PrintBitBoard(teste);
@@ -20,23 +21,29 @@ int _tmain(int argc, _TCHAR* argv[])
 	BitBoard::GetPieceCoordinate(teste).PrintCoordinate();
 	*/
 
-	ChuckSocket* p1Socket = new ChuckSocket("127.0.0.1", 50200);
-	//ChuckSocket* p2Socket = new ChuckSocket("127.0.0.1", 50200);
+	char *address = "127.0.0.1";
+	int port = 50200;
+
+	if(argc == 3)
+	{
+		address = argv[1];
+		port = atoi(argv[2]);
+	}
+
+	printf("Conectando a %s:%d\n", address, port);
+	ChuckSocket* p1Socket = new ChuckSocket(address, port);
 	
 	p1Socket->Connect();
-	//p2Socket->Connect();
 
-	if(!p1Socket->IsConnected()/* || !p2Socket->IsConnected()*/)
+	if(!p1Socket->IsConnected())
 	{
 		printf("Erro ao conectar!");
 		exit(0);
 	}
 
+	printf("Conectado!\n");
 	string nameJson = ChuckJson::GetNameJson("Chuck N0rr15");
 	p1Socket->Send(nameJson);
-
-	//nameJson = ChuckJson::GetNameJson("Bozo");
-	//p2Socket->Send(nameJson);
 
 	char buffer[1024];
 	while(1)
@@ -48,10 +55,13 @@ int _tmain(int argc, _TCHAR* argv[])
 		bool sentMove = false;
 
 		GameState* state = ChuckJson::ParseGameState(buffer);
-		state->Print();
+		
+		state->PrintBoard();
 
 		if(state->whoMoves != 1)
-			continue;
+		{
+			state->SwapBoard();
+		}
 
 		if(state->badMove == true)
 		{
@@ -72,6 +82,11 @@ int _tmain(int argc, _TCHAR* argv[])
 		int randomPlay = rand() % newStates->size();
 
 		Play* selectedPlay = (*newStates)[randomPlay];
+
+		if(state->whoMoves != 1)
+		{
+			selectedPlay->SwapPlayCoordinates();
+		}
 
 		string playToSend = ChuckJson::GetPlayJson(selectedPlay);
 		printf("Mandei de ");

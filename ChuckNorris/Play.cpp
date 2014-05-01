@@ -12,3 +12,9 @@ Play::Play(void)
 Play::~Play(void)
 {
 }
+
+void Play::SwapPlayCoordinates()
+{
+	this->origin.Swap();
+	this->destination.Swap();
+}

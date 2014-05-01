@@ -11,6 +11,8 @@ public:
 	Coordinate origin;
 	Coordinate destination;
 
+	void SwapPlayCoordinates();
+
 	Play(void);
 	~Play(void);
 };

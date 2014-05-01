@@ -16,6 +16,8 @@ public:
 	Coordinate(int x, int y);
 	void PrintCoordinate();
 
+	void Swap();
+
 	static Coordinate* Parse(string strToParse);
 
 };
@@ -38,5 +40,7 @@ public:
 	~GameState(void);
 
 	void Print();
+	void PrintBoard();
+	void SwapBoard();
 };
 

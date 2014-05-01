@@ -35,6 +35,12 @@ Coordinate* Coordinate::Parse(string strToParse)
 
 }
 
+void Coordinate::Swap()
+{
+	this->x = 7 - this->x;
+	this->y = 7 - this->y;
+}
+
 //////////////////////////////////////////////////
 GameState::GameState(void)
 {
@@ -62,4 +68,47 @@ void GameState::Print()
 	printf("Draw:              %s\n", this->draw ? "true" : "false");
 
 	return;
+}
+
+void GameState::PrintBoard()
+{
+	const char* boardChar = this->board.c_str();
+
+	for(int i = 0; i < 64; i ++)
+	{
+		if((i % 8) == 0)
+			printf("\n");
+		printf("%c", boardChar[i]);
+	}
+}
+
+void GameState::SwapBoard()
+{
+	this->board = string ( this->board.rbegin(), this->board.rend() );
+
+	for(int i = 0; i < this->board.size(); i++)
+	{
+		switch(this->board[i])
+			{
+			case 'P':
+				this->board[i] = 'p';
+				break;
+			case 'R':
+				this->board[i] = 'r';
+				break;
+			case 'B':
+				this->board[i] = 'b';
+				break;
+
+			case 'p':
+				this->board[i] = 'P';
+				break;
+			case 'r':
+				this->board[i] = 'R';
+				break;
+			case 'b':
+				this->board[i] = 'B';
+				break;
+			}
+	}
 }
