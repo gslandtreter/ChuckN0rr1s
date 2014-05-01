@@ -31,7 +31,8 @@ GameState* ChuckJson::ParseGameState( string gameStateJson )
 	GameState* newGameState = new GameState();
 
 	newGameState->board = root.get("board",NULL).asString();
-	newGameState->enpassant = Coordinate::Parse(root.get("enpassant",NULL).asString());
+	//newGameState->enpassant = Coordinate::Parse(root.get("enpassant",NULL).asString());
+	//TODO: Fix enpassant
 	newGameState->whoMoves = root.get("who_moves",0).asInt();
 	newGameState->badMove = root.get("bad_move",false).asBool();
 	newGameState->whiteInfractions = root.get("white_infractions",0).asInt();

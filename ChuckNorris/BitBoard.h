@@ -15,6 +15,7 @@ public:
 
 	static const bitBoard_t EMPTY = 0;
 	static const bitBoard_t UNIVERSE = 0xffffffffffffffffULL;
+	static const bitBoard_t FIRST = 0x8000000000000000ULL;
 
 	static const bitBoard_t notAFile = 0xfefefefefefefefe; // ~0x0101010101010101
 	static const bitBoard_t notHFile = 0x7f7f7f7f7f7f7f7f; // ~0x8080808080808080
@@ -45,9 +46,11 @@ public:
 	static bitBoard_t GoNorthWest (bitBoard_t currentBitBoard);
 
 	static void PrintBitBoard(bitBoard_t bitBoard);
+	static bitBoard_t SwapBitBoard(bitBoard_t bitBoard);
 	static BitBoard* Generate(GameState* gameState);
 	static Coordinate GetPieceCoordinate(bitBoard_t bitBoard);
 	static int PieceCount(bitBoard_t bitBoard);
+	static BitBoard* Swap(BitBoard* bitBoard);
 
 	void CalculateRelativeBitBoards();
 

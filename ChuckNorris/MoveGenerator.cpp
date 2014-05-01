@@ -1,6 +1,5 @@
 #include "MoveGenerator.h"
 
-
 MoveGenerator::MoveGenerator(void)
 {
 }
@@ -20,6 +19,28 @@ vector<Play*>* MoveGenerator::GenerateAllMovements( BitBoard* currentState )
 	MoveGenerator::GenerateAllBishopMovements(currentState, generatedMovementList);
 	
 	return generatedMovementList;
+}
+
+void MoveGenerator::GenerateAllMovements( PlayTree* playTree )
+{
+	if(!playTree || !playTree->currentPlay)
+		return;
+
+	vector<Play*>* generatedMovementList = GenerateAllMovements(playTree->currentPlay->playBitBoard);
+
+	playTree->possiblePlays = new vector<PlayTree*>();
+
+	for(int i = 0; i < generatedMovementList->size(); i++)
+	{
+		PlayTree* child = new PlayTree();
+
+		child->currentPlay = (*generatedMovementList)[i];
+		child->possiblePlays = NULL;
+
+		playTree->possiblePlays->push_back(child);
+	}
+
+	delete generatedMovementList;
 }
 
 
@@ -76,12 +97,6 @@ void MoveGenerator::GeneratePawnMovements( BitBoard* currentState, bitBoard_t pa
 		newPlay->origin = pawnCoordinate;
 		newPlay->destination = BitBoard::GetPieceCoordinate(pawnNorthEast);
 		newPlay->playBitBoard = newState;
-
-		BitBoard::PrintBitBoard(newState->blackBishops);
-		BitBoard::PrintBitBoard(newState->blackRooks);
-		BitBoard::PrintBitBoard(newState->blackPawns);
-
-		printf("%d %d\n", BitBoard::PieceCount(newState->whitePieces), BitBoard::PieceCount(newState->blackPieces));
 
 		resultList->push_back(newPlay);
 		

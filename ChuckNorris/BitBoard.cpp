@@ -223,3 +223,50 @@ vector<bitBoard_t>* BitBoard::GetWhiteBishops()
 	return BitBoard::GetSpecificPieceList(this->whiteBishops);
 }
 
+bitBoard_t BitBoard::SwapBitBoard( bitBoard_t bitBoard )
+{
+	bitBoard_t stateCopy = bitBoard;
+	bitBoard_t retVal = 0;
+	bitBoard_t set = 0;
+
+	for(int i = 0; i < 64; i++)
+	{
+		set = stateCopy & 1;
+		stateCopy >>= 1;
+
+		if(set)
+		{
+			retVal += 1;
+			
+		}
+
+		if(i < 63)
+			retVal <<= 1;
+	}
+
+	return retVal;
+}
+
+
+BitBoard* BitBoard::Swap( BitBoard* bitBoard )
+{
+	if(!bitBoard)
+		return NULL;
+
+	BitBoard* swappedBitBoard = new BitBoard();
+
+	swappedBitBoard->whitePawns = SwapBitBoard(bitBoard->blackPawns);
+	swappedBitBoard->whiteRooks = SwapBitBoard(bitBoard->blackRooks);
+	swappedBitBoard->whiteBishops = SwapBitBoard(bitBoard->blackBishops);
+
+	swappedBitBoard->blackPawns = SwapBitBoard(bitBoard->whitePawns);
+	swappedBitBoard->blackRooks = SwapBitBoard(bitBoard->whiteRooks);
+	swappedBitBoard->blackBishops = SwapBitBoard(bitBoard->whiteBishops);
+
+	swappedBitBoard->CalculateRelativeBitBoards();
+
+	return swappedBitBoard;
+}
+
+
+

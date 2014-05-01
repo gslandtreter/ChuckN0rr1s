@@ -4,6 +4,7 @@
 #include "GameState.h"
 #include <vector>
 #include "Play.h"
+#include "PlayTree.h"
 
 using namespace std;
 
@@ -20,6 +21,7 @@ public:
 	static void GenerateAllBishopMovements(BitBoard* currentState, vector<Play*>* resultList);
 
 	static vector<Play*>* GenerateAllMovements(BitBoard* currentState);
+	static void GenerateAllMovements(PlayTree* playTree);
 
 	MoveGenerator(void);
 	~MoveGenerator(void);
