@@ -23,7 +23,19 @@ int Evaluation::EvaluateScore( Play* play )
 	int whiteCount = BitBoard::PieceCount(play->playBitBoard->whitePieces);
 	int blackCount = BitBoard::PieceCount(play->playBitBoard->blackPieces);
 
-	play->score = (whiteCount - blackCount);
+	int whitePawnSecond = BitBoard::PieceCount(play->playBitBoard->whitePawns & BitBoard::SECONDCOLUMN);
+	int whitePawnThird = BitBoard::PieceCount(play->playBitBoard->whitePawns & BitBoard::THIRDCOLUMN);
+	int whitePawnFourth= BitBoard::PieceCount(play->playBitBoard->whitePawns & BitBoard::FOURTHCOLUMN);
+	int whitePawnFifth= BitBoard::PieceCount(play->playBitBoard->whitePawns & BitBoard::FIFTHCOLUMN);
+	int whitePawnSixth = BitBoard::PieceCount(play->playBitBoard->whitePawns & BitBoard::SIXTHCOLUMN);
+	int whitePawnSeventh = BitBoard::PieceCount(play->playBitBoard->whitePawns & BitBoard::SEVENTHCOLUMN);
+	int whitePawnEighth = BitBoard::PieceCount(play->playBitBoard->whitePawns & BitBoard::EIGHTHCOLUMN);
+
+	int pawnFraction = whitePawnSecond + (whitePawnThird * 2) +
+		(whitePawnFourth * 3) + (whitePawnFifth * 4) + (whitePawnSixth * 20) + 
+		(whitePawnSeventh * 30) + (whitePawnEighth * 50);
+
+	play->score = pawnFraction + 8 * (whiteCount - blackCount);
 
 	return play->score;
 }

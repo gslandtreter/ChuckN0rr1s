@@ -69,7 +69,6 @@ int main(int argc, char* argv[])
 		MoveGenerator::GenerateAllMovements(treeRoot);
 
 		int playCounter = 0;
-		int lastLevel = 0;
 		for(int i = 0; i < treeRoot->possiblePlays->size(); i++)
 		{
 			PlayTree* myMovement = (*treeRoot->possiblePlays)[i];
@@ -80,44 +79,20 @@ int main(int argc, char* argv[])
 				PlayTree* enemyMovement = (*myMovement->possiblePlays)[j];
 				MoveGenerator::GenerateAllMovements(enemyMovement);
 
+				for(int k = 0; k < enemyMovement->possiblePlays->size(); k++)
+				{
+					PlayTree* enemySecond = (*enemyMovement->possiblePlays)[k];
+					MoveGenerator::GenerateAllMovements(enemySecond);
+
+					playCounter += enemySecond->possiblePlays->size();
+				}
 				playCounter += enemyMovement->possiblePlays->size();
 			}
-
-			playCounter += treeRoot->possiblePlays->size();
 		}
-			/*vector<Play*>* enemyMovements = MoveGenerator::GenerateAllMovements(BitBoard::Swap((*newStates)[i]->playBitBoard));
-			//printf("Jogada %d, numero de movimentos do inimigo: %d\n", i+1, enemyMovements->size());
+		
+		playCounter += treeRoot->possiblePlays->size();
 
-			playCounter++;
-			for(int n = 0; n < enemyMovements->size(); n++)
-			{
-				vector<Play*>* mySecondLevel = MoveGenerator::GenerateAllMovements(BitBoard::Swap((*enemyMovements)[n]->playBitBoard));
-				//printf("Jogada %d-%d, numero de movimentos do inimigo: %d\n", i+1, n+1, mySecondLevel->size());
-
-				playCounter++;
-
-				for(int m = 0; m < mySecondLevel->size(); m++)
-				{
-					vector<Play*>* enemySecondLevel = MoveGenerator::GenerateAllMovements(BitBoard::Swap((*mySecondLevel)[m]->playBitBoard));
-					//printf("Jogada %d-%d-%d, numero de movimentos do inimigo: %d\n", i+1, n+1, m+1, enemySecondLevel->size());
-
-					playCounter++;
-
-					for(int k = 0; k < enemySecondLevel->size(); k++)
-					{
-						vector<Play*>* myThirdLevel = MoveGenerator::GenerateAllMovements(BitBoard::Swap((*enemySecondLevel)[k]->playBitBoard));
-						//printf("Jogada %d-%d-%d-%d, numero de movimentos do inimigo: %d\n", i+1, n+1, m+1, k+1, myThirdLevel->size());
-
-						playCounter++;
-						lastLevel++;
-					}
-				}
-			}
-
-			playCounter++;
-		}*/
-
-		printf("Jogadas Possiveis: %d, Ultimo nivel: %d\n", playCounter, lastLevel);
+		printf("Jogadas Possiveis: %d\n", playCounter);
 		printf("Pecas brancas: %d, Pecas pretas: %d\n", 
 			BitBoard::PieceCount(boardState->whitePieces),
 			BitBoard::PieceCount(boardState->blackPieces));
@@ -128,6 +103,9 @@ int main(int argc, char* argv[])
 		}
 		
 		Play* selectedPlay = Play::GetBestChild(treeRoot);
+
+		if(!selectedPlay) //Nothing more todo ;(
+			exit(0);
 
 		if(state->whoMoves != 1)
 				selectedPlay->SwapPlayCoordinates();
@@ -140,7 +118,7 @@ int main(int argc, char* argv[])
 
 		p1Socket->Send(playToSend);
 
-		//delete treeRoot;
+		delete treeRoot;
 	}
 	
 	return 0;

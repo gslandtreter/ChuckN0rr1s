@@ -17,6 +17,15 @@ public:
 	static const bitBoard_t UNIVERSE = 0xffffffffffffffffULL;
 	static const bitBoard_t FIRST = 0x8000000000000000ULL;
 
+	static const bitBoard_t FIRSTCOLUMN =   0xFF00000000000000ULL;
+	static const bitBoard_t SECONDCOLUMN =  0x00FF000000000000ULL;
+	static const bitBoard_t THIRDCOLUMN =   0x0000FF0000000000ULL;
+	static const bitBoard_t FOURTHCOLUMN =  0x00000FF000000000ULL;
+	static const bitBoard_t FIFTHCOLUMN =   0x00000000FF000000ULL;
+	static const bitBoard_t SIXTHCOLUMN =   0x0000000000FF0000ULL;
+	static const bitBoard_t SEVENTHCOLUMN = 0x000000000000FF00ULL;
+	static const bitBoard_t EIGHTHCOLUMN =  0x00000000000000FFULL;
+
 	static const bitBoard_t notAFile = 0xfefefefefefefefe; // ~0x0101010101010101
 	static const bitBoard_t notHFile = 0x7f7f7f7f7f7f7f7f; // ~0x8080808080808080
 

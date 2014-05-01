@@ -77,6 +77,34 @@ void MoveGenerator::GeneratePawnMovements( BitBoard* currentState, bitBoard_t pa
 		newPlay->playBitBoard = newState;
 
 		resultList->push_back(newPlay);
+
+		if(pawn & BitBoard::SECONDCOLUMN) //Pawn can try to double forward
+		{
+			bitBoard_t pawnForward = BitBoard::GoNorth(BitBoard::GoNorth(pawn)) & currentState->emptySpaces;
+
+			if(pawnForward) //No one is obstructing pawn! Go Forward!!! Again...
+			{
+				Play* newPlay = new Play();
+				BitBoard* newState = new BitBoard();
+
+				newState->whiteRooks = currentState->whiteRooks;
+				newState->whiteBishops = currentState->whiteBishops;
+				newState->whitePawns = (currentState->whitePawns ^ pawn) | pawnForward;
+
+				newState->blackBishops = currentState->blackBishops;
+				newState->blackPawns = currentState->blackPawns;
+				newState->blackRooks = currentState->blackRooks;
+
+				newState->CalculateRelativeBitBoards();
+
+				newPlay->origin = pawnCoordinate;
+				newPlay->destination = BitBoard::GetPieceCoordinate(pawnForward);
+				newPlay->playBitBoard = newState;
+
+				resultList->push_back(newPlay);
+			}
+
+		}
 	}
 
 	if(pawnNorthEast) //Theres a black piece northeast, go get it!
