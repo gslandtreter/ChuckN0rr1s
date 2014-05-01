@@ -41,15 +41,12 @@ int main(int argc, char* argv[])
 	char buffer[1024];
 	while(1)
 	{
-		//Used for random seed.
 		srand(time(0));
 
 		int bytesReceived = p1Socket->Receive(buffer, sizeof(buffer));
 
 		GameState* state = ChuckJson::ParseGameState(buffer);
-		BitBoard* boardState = BitBoard::Generate(state);
-
-		BitBoard::PrintBitBoard(boardState->fullBoard);
+		BitBoard* boardState;
 
 		if(state->whoMoves != 1)
 			state->SwapBoard();
@@ -58,7 +55,6 @@ int main(int argc, char* argv[])
 			printf("\nDEUMERDA!\n");
 
 		boardState = BitBoard::Generate(state);
-		//vector<Play*>* newStates = MoveGenerator::GenerateAllMovements(boardState);
 
 		Play* rootPLay = new Play();
 		rootPLay->playBitBoard = boardState;
@@ -81,10 +77,10 @@ int main(int argc, char* argv[])
 
 				for(int k = 0; k < enemyMovement->possiblePlays->size(); k++)
 				{
-					PlayTree* enemySecond = (*enemyMovement->possiblePlays)[k];
-					MoveGenerator::GenerateAllMovements(enemySecond);
+					PlayTree* mySecondMovement = (*enemyMovement->possiblePlays)[k];
+					MoveGenerator::GenerateAllMovements(mySecondMovement);
 
-					playCounter += enemySecond->possiblePlays->size();
+					playCounter += mySecondMovement->possiblePlays->size();
 				}
 				playCounter += enemyMovement->possiblePlays->size();
 			}
