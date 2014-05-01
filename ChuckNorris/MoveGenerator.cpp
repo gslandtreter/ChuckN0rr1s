@@ -15,8 +15,9 @@ vector<Play*>* MoveGenerator::GenerateAllMovements( BitBoard* currentState )
 {
 	vector<Play*>* generatedMovementList = new vector<Play*>();
 
-	MoveGenerator::GenerateAllRookMovements(currentState, generatedMovementList);
 	MoveGenerator::GenerateAllPawnMovements(currentState, generatedMovementList);
+	MoveGenerator::GenerateAllRookMovements(currentState, generatedMovementList);
+	MoveGenerator::GenerateAllBishopMovements(currentState, generatedMovementList);
 	
 	return generatedMovementList;
 }
@@ -231,6 +232,134 @@ void MoveGenerator::GenerateRookMovements( BitBoard* currentState, bitBoard_t ro
 	}
 }
 
+void MoveGenerator::GenerateBishopMovements( BitBoard* currentState, bitBoard_t bishop, vector<Play*>* resultList )
+{
+	if(!currentState || !bishop)
+		return;
+
+	bitBoard_t emptyOrBlack = currentState->emptySpaces | currentState->blackPieces;
+
+	bitBoard_t bishopNorthEast = BitBoard::GoNorthEast(bishop) & emptyOrBlack;
+
+	Coordinate bishopCoordinate = BitBoard::GetPieceCoordinate(bishop);
+
+	while(bishopNorthEast)
+	{
+		Play* newPlay = new Play();
+		BitBoard* newState = new BitBoard();
+
+		newState->whitePawns = currentState->whitePawns;
+		newState->whiteRooks = newState->whiteRooks;
+		newState->whiteBishops = (currentState->whiteBishops ^ bishop) | bishopNorthEast;
+
+		newState->blackBishops = currentState->blackBishops ^ bishopNorthEast;
+		newState->blackPawns = currentState->blackPawns ^ bishopNorthEast;
+		newState->blackRooks = currentState->blackRooks ^ bishopNorthEast;
+
+		newState->CalculateRelativeBitBoards();
+
+		newPlay->origin = bishopCoordinate;
+		newPlay->destination = BitBoard::GetPieceCoordinate(bishopNorthEast);
+		newPlay->playBitBoard = newState;
+
+		resultList->push_back(newPlay);
+
+		if(bishopNorthEast & currentState->blackPieces) //Se encontrou uma peça preta no caminho, termina o loop
+			break;
+
+		bishopNorthEast = BitBoard::GoNorthEast(bishopNorthEast) & emptyOrBlack;
+	}
+
+	
+	bitBoard_t bishopNorthWest = BitBoard::GoNorthWest(bishop) & emptyOrBlack;
+
+	while(bishopNorthWest)
+	{
+		Play* newPlay = new Play();
+		BitBoard* newState = new BitBoard();
+
+		newState->whitePawns = currentState->whitePawns;
+		newState->whiteRooks = newState->whiteRooks;
+		newState->whiteBishops = (currentState->whiteBishops ^ bishop) | bishopNorthWest;
+
+		newState->blackBishops = currentState->blackBishops ^ bishopNorthWest;
+		newState->blackPawns = currentState->blackPawns ^ bishopNorthWest;
+		newState->blackRooks = currentState->blackRooks ^ bishopNorthWest;
+
+		newState->CalculateRelativeBitBoards();
+
+		newPlay->origin = bishopCoordinate;
+		newPlay->destination = BitBoard::GetPieceCoordinate(bishopNorthWest);
+		newPlay->playBitBoard = newState;
+
+		resultList->push_back(newPlay);
+
+		if(bishopNorthWest & currentState->blackPieces) //Se encontrou uma peça preta no caminho, termina o loop
+			break;
+
+		bishopNorthWest = BitBoard::GoNorthWest(bishopNorthWest) & emptyOrBlack;
+
+	}
+
+	bitBoard_t bishopSouthEast = BitBoard::GoSouthEast(bishop) & emptyOrBlack;
+
+	while(bishopSouthEast)
+	{
+		Play* newPlay = new Play();
+		BitBoard* newState = new BitBoard();
+
+		newState->whitePawns = currentState->whitePawns;
+		newState->whiteRooks = newState->whiteRooks;
+		newState->whiteBishops = (currentState->whiteBishops ^ bishop) | bishopSouthEast;
+
+		newState->blackBishops = currentState->blackBishops ^ bishopSouthEast;
+		newState->blackPawns = currentState->blackPawns ^ bishopSouthEast;
+		newState->blackRooks = currentState->blackRooks ^ bishopSouthEast;
+
+		newState->CalculateRelativeBitBoards();
+
+		newPlay->origin = bishopCoordinate;
+		newPlay->destination = BitBoard::GetPieceCoordinate(bishopSouthEast);
+		newPlay->playBitBoard = newState;
+
+		resultList->push_back(newPlay);
+
+		if(bishopSouthEast & currentState->blackPieces) //Se encontrou uma peça preta no caminho, termina o loop
+			break;
+
+		bishopSouthEast = BitBoard::GoSouthEast(bishopSouthEast) & emptyOrBlack;
+	}
+	
+	bitBoard_t bishopSouthWest = BitBoard::GoSouthWest(bishop) & emptyOrBlack;
+
+	while(bishopSouthWest)
+	{
+		Play* newPlay = new Play();
+		BitBoard* newState = new BitBoard();
+
+		newState->whitePawns = currentState->whitePawns;
+		newState->whiteRooks = newState->whiteRooks;
+		newState->whiteBishops = (currentState->whiteBishops ^ bishop) | bishopSouthWest;
+
+		newState->blackBishops = currentState->blackBishops ^ bishopSouthWest;
+		newState->blackPawns = currentState->blackPawns ^ bishopSouthWest;
+		newState->blackRooks = currentState->blackRooks ^ bishopSouthWest;
+
+		newState->CalculateRelativeBitBoards();
+
+		newPlay->origin = bishopCoordinate;
+		newPlay->destination = BitBoard::GetPieceCoordinate(bishopSouthWest);
+		newPlay->playBitBoard = newState;
+
+		resultList->push_back(newPlay);
+
+		if(bishopSouthWest & currentState->blackPieces) //Se encontrou uma peça preta no caminho, termina o loop
+			break;
+
+		bishopSouthWest = BitBoard::GoSouthWest(bishopSouthWest) & emptyOrBlack;
+	}
+	
+}
 
 void MoveGenerator::GenerateAllPawnMovements( BitBoard* currentState, vector<Play*>* resultList )
 {
@@ -249,6 +378,16 @@ void MoveGenerator::GenerateAllRookMovements( BitBoard* currentState, vector<Pla
 	for(int i = 0; i < gotWhiteRooks->size(); i++)
 	{
 		MoveGenerator::GenerateRookMovements(currentState, (*gotWhiteRooks)[i], resultList);
+	}
+}
+
+void MoveGenerator::GenerateAllBishopMovements( BitBoard* currentState, vector<Play*>* resultList )
+{
+	vector<bitBoard_t>* gotWhiteBishops = currentState->GetWhiteBishops();
+
+	for(int i = 0; i < gotWhiteBishops->size(); i++)
+	{
+		MoveGenerator::GenerateBishopMovements(currentState, (*gotWhiteBishops)[i], resultList);
 	}
 }
 

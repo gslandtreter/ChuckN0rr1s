@@ -12,11 +12,11 @@
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-	/*
-	bitBoard_t teste = 17592186044416 >> 6;
+	
+	/*bitBoard_t teste = 17592186044416 << 14;
 
 	BitBoard::PrintBitBoard(teste);
-	BitBoard::PrintBitBoard(BitBoard::GoWest(teste));
+	BitBoard::PrintBitBoard(BitBoard::GoNorthEast(teste));
 	BitBoard::GetPieceCoordinate(teste).PrintCoordinate();
 	*/
 
