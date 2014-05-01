@@ -4,10 +4,10 @@
 #include <stdint.h>
 #include <stdio.h>
 #include "GameState.h"
-
+#include <vector>
 
 typedef uint64_t bitBoard_t;
-
+using namespace std;
 
 class BitBoard
 {
@@ -35,9 +35,12 @@ public:
 	BitBoard(void);
 	~BitBoard(void);
 
-
 	static bitBoard_t GoNorth (bitBoard_t currentBitBoard);
 	static bitBoard_t GoSouth (bitBoard_t currentBitBoard);
+	static bitBoard_t GoEast (bitBoard_t currentBitBoard);
+	static bitBoard_t GoWest (bitBoard_t currentBitBoard);
+	static bitBoard_t GoSouthEast (bitBoard_t currentBitBoard);
+	static bitBoard_t GoSouthWest (bitBoard_t currentBitBoard);
 	static bitBoard_t GoNorthEast (bitBoard_t currentBitBoard);
 	static bitBoard_t GoNorthWest (bitBoard_t currentBitBoard);
 
@@ -46,6 +49,12 @@ public:
 	static Coordinate GetPieceCoordinate(bitBoard_t bitBoard);
 
 	void CalculateRelativeBitBoards();
+
+	static vector<bitBoard_t>* GetSpecificPieceList(bitBoard_t pieceBitBoard);
+
+	vector<bitBoard_t>* GetWhitePawns();
+	vector<bitBoard_t>* GetWhiteRooks();
+	vector<bitBoard_t>* GetWhiteBishops();
 	
 };
 

@@ -33,6 +33,26 @@ bitBoard_t BitBoard::GoSouth( bitBoard_t currentBitBoard )
 	return currentBitBoard << 8;
 }
 
+bitBoard_t BitBoard::GoEast( bitBoard_t currentBitBoard )
+{
+	return (currentBitBoard << 1) & notAFile;
+}
+
+bitBoard_t BitBoard::GoWest( bitBoard_t currentBitBoard )
+{
+	return (currentBitBoard >> 1) & notHFile;
+}
+
+bitBoard_t BitBoard::GoSouthWest( bitBoard_t currentBitBoard )
+{
+	return (currentBitBoard << 7) & notHFile;
+}
+
+bitBoard_t BitBoard::GoSouthEast( bitBoard_t currentBitBoard )
+{
+	return (currentBitBoard << 9) & notAFile;
+}
+
 bitBoard_t BitBoard::GoNorthWest( bitBoard_t currentBitBoard )
 {
 	return (currentBitBoard >> 9) & notHFile;
@@ -147,6 +167,41 @@ void BitBoard::CalculateRelativeBitBoards()
 	this->emptySpaces = UNIVERSE ^ this->fullBoard;
 }
 
+vector<bitBoard_t>* BitBoard::GetSpecificPieceList( bitBoard_t pieceBitBoard )
+{
+	vector<bitBoard_t>* returnList = new vector<bitBoard_t>();
 
+	bitBoard_t stateCopy = pieceBitBoard;
+	bitBoard_t set = 0;
 
+	for(int i = 0; i < 64; i++)
+	{
+		set = stateCopy & 1;
+		stateCopy >>= 1;
+
+		if(set)
+		{
+			bitBoard_t foundPiece = 1;
+			foundPiece <<= i;
+			returnList->push_back(foundPiece);
+		}
+
+	}
+	return returnList;
+}
+
+vector<bitBoard_t>* BitBoard::GetWhitePawns()
+{
+	return BitBoard::GetSpecificPieceList(this->whitePawns);
+}
+
+vector<bitBoard_t>* BitBoard::GetWhiteRooks()
+{
+	return BitBoard::GetSpecificPieceList(this->whiteRooks);
+}
+
+vector<bitBoard_t>* BitBoard::GetWhiteBishops()
+{
+	return BitBoard::GetSpecificPieceList(this->whiteBishops);
+}
 

@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include <ctime> //For Random
 #include "ChuckJson.h"
 #include "ChuckSocket.h"
 #include "BitBoard.h"
@@ -11,13 +12,15 @@
 int _tmain(int argc, _TCHAR* argv[])
 {
 
-	/*bitBoard_t teste = 17592186044416 >> 5;
+	/*
+	bitBoard_t teste = 17592186044416 >> 6;
 
 	BitBoard::PrintBitBoard(teste);
-	BitBoard::GetPieceCoordinate(teste).PrintCoordinate();*/
+	BitBoard::PrintBitBoard(BitBoard::GoWest(teste));
+	BitBoard::GetPieceCoordinate(teste).PrintCoordinate();
+	*/
 
-
-	ChuckSocket* p1Socket = new ChuckSocket("127.0.0.1", 50100);
+	ChuckSocket* p1Socket = new ChuckSocket("127.0.0.1", 50200);
 	//ChuckSocket* p2Socket = new ChuckSocket("127.0.0.1", 50200);
 	
 	p1Socket->Connect();
@@ -38,6 +41,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	char buffer[1024];
 	while(1)
 	{
+		srand(time(0));
+
 		int bytesReceived = p1Socket->Receive(buffer, sizeof(buffer));
 
 		bool sentMove = false;
@@ -48,33 +53,36 @@ int _tmain(int argc, _TCHAR* argv[])
 		if(state->whoMoves != 1)
 			continue;
 
+		if(state->badMove == true)
+		{
+			printf("\nDEUMERDA!\n");
+		}
+
 		BitBoard* boardState = BitBoard::Generate(state);
 
-		BitBoard::PrintBitBoard(boardState->whitePieces);
+		BitBoard::PrintBitBoard(boardState->fullBoard);
 
-		vector<bitBoard_t>* gotWhitePawns = MoveGenerator::GetWhitePawns(boardState);
+		vector<Play*>* newStates = MoveGenerator::GenerateAllMovements(boardState);
 
-		for(int i = 0; i < gotWhitePawns->size(); i++)
-		{
-			vector<Play*>* newStates = MoveGenerator::GeneratePawnMovements(boardState, (*gotWhitePawns)[i]);
+		printf("Jogadas Possiveis: %d\n", newStates->size());
 
-			for(int n = 0; n < newStates->size(); n++)
-			{
-				Play* selectedPlay = (*newStates)[n];
+		if(!newStates->size())
+			exit(0);
 
-				string playToSend = ChuckJson::GetPlayJson(selectedPlay);
+		int randomPlay = rand() % newStates->size();
 
-				p1Socket->Send(playToSend);
-				sentMove = true;
-				break;
-			}
+		Play* selectedPlay = (*newStates)[randomPlay];
 
-			if(sentMove)
-				break;
-		}
+		string playToSend = ChuckJson::GetPlayJson(selectedPlay);
+		printf("Mandei de ");
+		selectedPlay->origin.PrintCoordinate();
+		printf(" para ");
+		selectedPlay->destination.PrintCoordinate();
+
+		p1Socket->Send(playToSend);
+		sentMove = true;
 	}
 	
-
 	return 0;
 }
 

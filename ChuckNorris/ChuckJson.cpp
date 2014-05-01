@@ -48,21 +48,8 @@ std::string ChuckJson::GetPlayJson( Play* play )
 	if(!play)
 		return NULL;
 
-	char sourceCoord[64];
-	char destCoord[16];
+	char strToSend[64];
+	sprintf(strToSend, "{\"to\": [%d, %d], \"from\": [%d, %d]}", play->destination.x, play->destination.y ,play->origin.x, play->origin.y);
 
-	
-	sprintf(sourceCoord, "{\"to\": [%d, %d], \"from\": [%d, %d]}", play->destination.x, play->destination.y ,play->origin.x, play->origin.y);
-	//sprintf(sourceCoord, "[%d, %d]", play->origin.x, play->origin.y);
-	//sprintf(destCoord, "[%d, %d]", play->destination.x, play->destination.y);
-
-	return sourceCoord;
-	Json::Value root;
-	root["to"] = destCoord;
-	root["from"] = sourceCoord;
-
-	Json::StyledWriter writer;
-	string playJson = writer.write(root);
-
-	return playJson;
+	return strToSend;
 }
