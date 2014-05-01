@@ -47,6 +47,7 @@ public:
 	static void PrintBitBoard(bitBoard_t bitBoard);
 	static BitBoard* Generate(GameState* gameState);
 	static Coordinate GetPieceCoordinate(bitBoard_t bitBoard);
+	static int PieceCount(bitBoard_t bitBoard);
 
 	void CalculateRelativeBitBoards();
 

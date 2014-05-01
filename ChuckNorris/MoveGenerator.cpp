@@ -67,9 +67,9 @@ void MoveGenerator::GeneratePawnMovements( BitBoard* currentState, bitBoard_t pa
 		newState->whiteBishops = currentState->whiteBishops;
 		newState->whitePawns = (currentState->whitePawns ^ pawn) | pawnNorthEast;
 
-		newState->blackBishops = currentState->blackBishops ^ pawnNorthEast;
-		newState->blackPawns = currentState->blackPawns ^ pawnNorthEast;
-		newState->blackRooks = currentState->blackRooks ^ pawnNorthEast;
+		newState->blackBishops = currentState->blackBishops & (~pawnNorthEast);
+		newState->blackPawns = currentState->blackPawns & (~pawnNorthEast);
+		newState->blackRooks = currentState->blackRooks & (~pawnNorthEast);
 
 		newState->CalculateRelativeBitBoards();
 
@@ -77,7 +77,14 @@ void MoveGenerator::GeneratePawnMovements( BitBoard* currentState, bitBoard_t pa
 		newPlay->destination = BitBoard::GetPieceCoordinate(pawnNorthEast);
 		newPlay->playBitBoard = newState;
 
+		BitBoard::PrintBitBoard(newState->blackBishops);
+		BitBoard::PrintBitBoard(newState->blackRooks);
+		BitBoard::PrintBitBoard(newState->blackPawns);
+
+		printf("%d %d\n", BitBoard::PieceCount(newState->whitePieces), BitBoard::PieceCount(newState->blackPieces));
+
 		resultList->push_back(newPlay);
+		
 	}
 
 	if(pawnNorthWest) //Theres a black piece northwest, go get it!
@@ -89,9 +96,9 @@ void MoveGenerator::GeneratePawnMovements( BitBoard* currentState, bitBoard_t pa
 		newState->whiteBishops = currentState->whiteBishops;
 		newState->whitePawns = (currentState->whitePawns ^ pawn) | pawnNorthWest;
 
-		newState->blackBishops = currentState->blackBishops ^ pawnNorthWest;
-		newState->blackPawns = currentState->blackPawns ^ pawnNorthWest;
-		newState->blackRooks = currentState->blackRooks ^ pawnNorthWest;
+		newState->blackBishops = currentState->blackBishops  & (~pawnNorthWest);
+		newState->blackPawns = currentState->blackPawns  & (~pawnNorthWest);
+		newState->blackRooks = currentState->blackRooks  & (~pawnNorthWest);
 
 		newState->CalculateRelativeBitBoards();
 
@@ -124,9 +131,9 @@ void MoveGenerator::GenerateRookMovements( BitBoard* currentState, bitBoard_t ro
 		newState->whiteBishops = currentState->whiteBishops;
 		newState->whiteRooks = (currentState->whiteRooks ^ rook) | rookForward;
 
-		newState->blackBishops = currentState->blackBishops ^ rookForward;
-		newState->blackPawns = currentState->blackPawns ^ rookForward;
-		newState->blackRooks = currentState->blackRooks ^ rookForward;
+		newState->blackBishops = currentState->blackBishops  & (~rookForward);
+		newState->blackPawns = currentState->blackPawns  & (~rookForward);
+		newState->blackRooks = currentState->blackRooks  & (~rookForward);
 
 		newState->CalculateRelativeBitBoards();
 
@@ -154,9 +161,9 @@ void MoveGenerator::GenerateRookMovements( BitBoard* currentState, bitBoard_t ro
 		newState->whiteBishops = currentState->whiteBishops;
 		newState->whiteRooks = (currentState->whiteRooks ^ rook) | rookEast;
 
-		newState->blackBishops = currentState->blackBishops ^ rookEast;
-		newState->blackPawns = currentState->blackPawns ^ rookEast;
-		newState->blackRooks = currentState->blackRooks ^ rookEast;
+		newState->blackBishops = currentState->blackBishops  & (~rookEast);
+		newState->blackPawns = currentState->blackPawns  & (~rookEast);
+		newState->blackRooks = currentState->blackRooks  & (~rookEast);
 
 		newState->CalculateRelativeBitBoards();
 
@@ -184,9 +191,9 @@ void MoveGenerator::GenerateRookMovements( BitBoard* currentState, bitBoard_t ro
 		newState->whiteBishops = currentState->whiteBishops;
 		newState->whiteRooks = (currentState->whiteRooks ^ rook) | rookWest;
 
-		newState->blackBishops = currentState->blackBishops ^ rookWest;
-		newState->blackPawns = currentState->blackPawns ^ rookWest;
-		newState->blackRooks = currentState->blackRooks ^ rookWest;
+		newState->blackBishops = currentState->blackBishops  & (~rookWest);
+		newState->blackPawns = currentState->blackPawns  & (~rookWest);
+		newState->blackRooks = currentState->blackRooks  & (~rookWest);
 
 		newState->CalculateRelativeBitBoards();
 
@@ -213,9 +220,9 @@ void MoveGenerator::GenerateRookMovements( BitBoard* currentState, bitBoard_t ro
 		newState->whiteBishops = currentState->whiteBishops;
 		newState->whiteRooks = (currentState->whiteRooks ^ rook) | rookSouth;
 
-		newState->blackBishops = currentState->blackBishops ^ rookSouth;
-		newState->blackPawns = currentState->blackPawns ^ rookSouth;
-		newState->blackRooks = currentState->blackRooks ^ rookSouth;
+		newState->blackBishops = currentState->blackBishops  & (~rookSouth);
+		newState->blackPawns = currentState->blackPawns  & (~rookSouth);
+		newState->blackRooks = currentState->blackRooks  & (~rookSouth);
 
 		newState->CalculateRelativeBitBoards();
 
@@ -252,9 +259,9 @@ void MoveGenerator::GenerateBishopMovements( BitBoard* currentState, bitBoard_t 
 		newState->whiteRooks = newState->whiteRooks;
 		newState->whiteBishops = (currentState->whiteBishops ^ bishop) | bishopNorthEast;
 
-		newState->blackBishops = currentState->blackBishops ^ bishopNorthEast;
-		newState->blackPawns = currentState->blackPawns ^ bishopNorthEast;
-		newState->blackRooks = currentState->blackRooks ^ bishopNorthEast;
+		newState->blackBishops = currentState->blackBishops  & (~bishopNorthEast);
+		newState->blackPawns = currentState->blackPawns  & (~bishopNorthEast);
+		newState->blackRooks = currentState->blackRooks  & (~bishopNorthEast);
 
 		newState->CalculateRelativeBitBoards();
 
@@ -282,9 +289,9 @@ void MoveGenerator::GenerateBishopMovements( BitBoard* currentState, bitBoard_t 
 		newState->whiteRooks = newState->whiteRooks;
 		newState->whiteBishops = (currentState->whiteBishops ^ bishop) | bishopNorthWest;
 
-		newState->blackBishops = currentState->blackBishops ^ bishopNorthWest;
-		newState->blackPawns = currentState->blackPawns ^ bishopNorthWest;
-		newState->blackRooks = currentState->blackRooks ^ bishopNorthWest;
+		newState->blackBishops = currentState->blackBishops  & (~bishopNorthWest);
+		newState->blackPawns = currentState->blackPawns  & (~bishopNorthWest);
+		newState->blackRooks = currentState->blackRooks  & (~bishopNorthWest);
 
 		newState->CalculateRelativeBitBoards();
 
@@ -312,9 +319,9 @@ void MoveGenerator::GenerateBishopMovements( BitBoard* currentState, bitBoard_t 
 		newState->whiteRooks = newState->whiteRooks;
 		newState->whiteBishops = (currentState->whiteBishops ^ bishop) | bishopSouthEast;
 
-		newState->blackBishops = currentState->blackBishops ^ bishopSouthEast;
-		newState->blackPawns = currentState->blackPawns ^ bishopSouthEast;
-		newState->blackRooks = currentState->blackRooks ^ bishopSouthEast;
+		newState->blackBishops = currentState->blackBishops  & (~bishopSouthEast);
+		newState->blackPawns = currentState->blackPawns  & (~bishopSouthEast);
+		newState->blackRooks = currentState->blackRooks  & (~bishopSouthEast);
 
 		newState->CalculateRelativeBitBoards();
 
@@ -341,9 +348,9 @@ void MoveGenerator::GenerateBishopMovements( BitBoard* currentState, bitBoard_t 
 		newState->whiteRooks = newState->whiteRooks;
 		newState->whiteBishops = (currentState->whiteBishops ^ bishop) | bishopSouthWest;
 
-		newState->blackBishops = currentState->blackBishops ^ bishopSouthWest;
-		newState->blackPawns = currentState->blackPawns ^ bishopSouthWest;
-		newState->blackRooks = currentState->blackRooks ^ bishopSouthWest;
+		newState->blackBishops = currentState->blackBishops  & (~bishopSouthWest);
+		newState->blackPawns = currentState->blackPawns  & (~bishopSouthWest);
+		newState->blackRooks = currentState->blackRooks  & (~bishopSouthWest);
 
 		newState->CalculateRelativeBitBoards();
 

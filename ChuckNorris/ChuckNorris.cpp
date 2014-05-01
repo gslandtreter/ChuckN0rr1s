@@ -8,6 +8,7 @@
 #include "BitBoard.h"
 #include "MoveGenerator.h"
 #include "Play.h"
+#include "Evaluation.h"
 
 int main(int argc, char* argv[])
 {
@@ -56,7 +57,9 @@ int main(int argc, char* argv[])
 
 		GameState* state = ChuckJson::ParseGameState(buffer);
 		
-		state->PrintBoard();
+		BitBoard* boardState = BitBoard::Generate(state);
+
+		BitBoard::PrintBitBoard(boardState->fullBoard);
 
 		if(state->whoMoves != 1)
 		{
@@ -68,20 +71,25 @@ int main(int argc, char* argv[])
 			printf("\nDEUMERDA!\n");
 		}
 
-		BitBoard* boardState = BitBoard::Generate(state);
+		boardState = BitBoard::Generate(state);
 
 		BitBoard::PrintBitBoard(boardState->fullBoard);
 
 		vector<Play*>* newStates = MoveGenerator::GenerateAllMovements(boardState);
 
 		printf("Jogadas Possiveis: %d\n", newStates->size());
+		printf("Pecas brancas: %d, Pecas pretas: %d\n", 
+			BitBoard::PieceCount(boardState->whitePieces),
+			BitBoard::PieceCount(boardState->blackPieces));
 
 		if(!newStates->size())
 			exit(0);
 
-		int randomPlay = rand() % newStates->size();
+		//int randomPlay = rand() % newStates->size();
+		//Play* selectedPlay = (*newStates)[randomPlay];
 
-		Play* selectedPlay = (*newStates)[randomPlay];
+		Evaluation::EvaluatePlayList(newStates);
+		Play* selectedPlay = Play::GetBestPlay(newStates);
 
 		if(state->whoMoves != 1)
 		{

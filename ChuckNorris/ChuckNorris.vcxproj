@@ -101,6 +101,7 @@
     <ClInclude Include="BitBoard.h" />
     <ClInclude Include="ChuckJson.h" />
     <ClInclude Include="ChuckSocket.h" />
+    <ClInclude Include="Evaluation.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="MoveGenerator.h" />
     <ClInclude Include="Play.h" />
@@ -119,6 +120,7 @@
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">json\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ClCompile Include="ChuckSocket.cpp" />
+    <ClCompile Include="Evaluation.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="MoveGenerator.cpp" />
     <ClCompile Include="Play.cpp" />

@@ -1,6 +1,9 @@
 #pragma once
 
 #include "BitBoard.h"
+#include <vector>
+
+using namespace std;
 
 class Play
 {
@@ -11,7 +14,11 @@ public:
 	Coordinate origin;
 	Coordinate destination;
 
+	int score;
+
 	void SwapPlayCoordinates();
+
+	static Play* GetBestPlay(vector<Play*>* playList);
 
 	Play(void);
 	~Play(void);

@@ -104,6 +104,24 @@ Coordinate BitBoard::GetPieceCoordinate( bitBoard_t bitBoard )
 	return Coordinate(row, column);
 }
 
+int BitBoard::PieceCount( bitBoard_t pieceBitBoard )
+{
+	int retVal = 0;
+
+	bitBoard_t stateCopy = pieceBitBoard;
+	bitBoard_t set = 0;
+
+	for(int i = 0; i < 64; i++)
+	{
+		set = stateCopy & 1;
+		stateCopy >>= 1;
+
+		if(set)
+			retVal++;
+	}
+	return retVal;
+}
+
 BitBoard* BitBoard::Generate( GameState* gameState )
 {
 	if(!gameState)
@@ -114,7 +132,7 @@ BitBoard* BitBoard::Generate( GameState* gameState )
 	const char* boardString = gameState->board.c_str();
 	
 	//Begin filling bitboard
-	for(int i = 64; i > 0; i--)
+	for(int i = 64; i >= 0; i--)
 	{
 		switch(boardString[i])
 		{
