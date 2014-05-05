@@ -54,6 +54,17 @@ int main(int argc, char* argv[])
 		if(state->badMove == true)
 			printf("\nDEUMERDA!\n");
 
+		if(state->winner != 0)
+		{
+			printf("\n\nWinner: %d!\n\n", state->winner);
+			continue;
+		}
+		else if (state->draw)
+		{
+			printf("\n\nDRAW!\n\n", state->winner);
+			continue;
+		}
+
 		boardState = BitBoard::Generate(state);
 
 		Play* rootPLay = new Play();
@@ -64,41 +75,65 @@ int main(int argc, char* argv[])
 
 		MoveGenerator::GenerateAllMovements(treeRoot);
 
-		int playCounter = 0;
-		for(int i = 0; i < treeRoot->possiblePlays->size(); i++)
-		{
-			PlayTree* myMovement = (*treeRoot->possiblePlays)[i];
-			MoveGenerator::GenerateAllMovements(myMovement);
+		Play* selectedPlay = NULL;
 
-			for(int j = 0; j < myMovement->possiblePlays->size(); j++)
+		if(treeRoot->possiblePlays)
+		{
+			for(int i = 0; i < treeRoot->possiblePlays->size(); i++)
 			{
-				PlayTree* enemyMovement = (*myMovement->possiblePlays)[j];
-				MoveGenerator::GenerateAllMovements(enemyMovement);
-
-				for(int k = 0; k < enemyMovement->possiblePlays->size(); k++)
+				PlayTree* myMovement = (*treeRoot->possiblePlays)[i];
+				
+				if(myMovement->currentPlay->playBitBoard->IsFinalState())
 				{
-					PlayTree* mySecondMovement = (*enemyMovement->possiblePlays)[k];
-					MoveGenerator::GenerateAllMovements(mySecondMovement);
-
-					playCounter += mySecondMovement->possiblePlays->size();
+					selectedPlay = myMovement->currentPlay;
+					break;
 				}
-				playCounter += enemyMovement->possiblePlays->size();
 			}
+
 		}
-		
-		playCounter += treeRoot->possiblePlays->size();
 
-		printf("Jogadas Possiveis: %d\n", playCounter);
-		printf("Pecas brancas: %d, Pecas pretas: %d\n", 
-			BitBoard::PieceCount(boardState->whitePieces),
-			BitBoard::PieceCount(boardState->blackPieces));
+		int playCounter = 0, lastLevel = 0;
 
-		for(int i = 0; i < treeRoot->possiblePlays->size(); i++)
+		if(!selectedPlay)
 		{
-			Evaluation::MiniMax((*treeRoot->possiblePlays)[i], false);
-		}
+			for(int i = 0; i < treeRoot->possiblePlays->size(); i++)
+			{
+				PlayTree* myMovement = (*treeRoot->possiblePlays)[i];
+				MoveGenerator::GenerateAllMovements(myMovement);
+
+				for(int j = 0; j < myMovement->possiblePlays->size(); j++)
+				{
+					PlayTree* enemyMovement = (*myMovement->possiblePlays)[j];
+					MoveGenerator::GenerateAllMovements(enemyMovement);
+
+					for(int k = 0; k < enemyMovement->possiblePlays->size(); k++)
+					{
+						PlayTree* mySecondMovement = (*enemyMovement->possiblePlays)[k];
+						MoveGenerator::GenerateAllMovements(mySecondMovement);
+
+						playCounter += mySecondMovement->possiblePlays->size();
+						lastLevel += mySecondMovement->possiblePlays->size();
+					}
+					playCounter += enemyMovement->possiblePlays->size();
+				}
+			}
 		
-		Play* selectedPlay = Play::GetBestChild(treeRoot);
+		
+			playCounter += treeRoot->possiblePlays->size();
+
+			printf("Jogadas Possiveis: %d\n, %d", playCounter, lastLevel);
+			printf("Pecas brancas: %d, Pecas pretas: %d\n", 
+				BitBoard::PieceCount(boardState->whitePieces),
+				BitBoard::PieceCount(boardState->blackPieces));
+
+			for(int i = 0; i < treeRoot->possiblePlays->size(); i++)
+			{
+				Evaluation::MiniMax((*treeRoot->possiblePlays)[i], false);
+			}
+
+			selectedPlay = Play::GetBestChild(treeRoot);
+
+		}
 
 		if(!selectedPlay) //Nothing more todo ;(
 			exit(0);
@@ -111,6 +146,7 @@ int main(int argc, char* argv[])
 		selectedPlay->origin.PrintCoordinate();
 		printf(" para ");
 		selectedPlay->destination.PrintCoordinate();
+		printf("\n");
 
 		p1Socket->Send(playToSend);
 

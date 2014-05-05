@@ -60,10 +60,13 @@ public:
 	static Coordinate GetPieceCoordinate(bitBoard_t bitBoard);
 	static int PieceCount(bitBoard_t bitBoard);
 	static BitBoard* Swap(BitBoard* bitBoard);
+	bool IsFinalState(bitBoard_t bitBoard);
 
 	void CalculateRelativeBitBoards();
+	bool IsFinalState();
 
 	static vector<bitBoard_t>* GetSpecificPieceList(bitBoard_t pieceBitBoard);
+
 
 	vector<bitBoard_t>* GetWhitePawns();
 	vector<bitBoard_t>* GetWhiteRooks();

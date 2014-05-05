@@ -268,5 +268,10 @@ BitBoard* BitBoard::Swap( BitBoard* bitBoard )
 	return swappedBitBoard;
 }
 
+bool BitBoard::IsFinalState()
+{
+	return BitBoard::PieceCount(this->whitePawns & BitBoard::EIGHTHCOLUMN);
+}
+
 
 

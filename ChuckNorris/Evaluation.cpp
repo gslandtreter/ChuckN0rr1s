@@ -23,6 +23,16 @@ int Evaluation::EvaluateScore( Play* play )
 	int whiteCount = BitBoard::PieceCount(play->playBitBoard->whitePieces);
 	int blackCount = BitBoard::PieceCount(play->playBitBoard->blackPieces);
 
+	int whiteBishops = BitBoard::PieceCount(play->playBitBoard->whiteBishops);
+	int whiteRooks = BitBoard::PieceCount(play->playBitBoard->whiteRooks);
+
+	int blackBishops = BitBoard::PieceCount(play->playBitBoard->blackBishops);
+	int blackRooks = BitBoard::PieceCount(play->playBitBoard->blackRooks);
+
+	int totalPieceDifference = whiteCount - blackCount;
+	int bishopDifference = whiteBishops - blackBishops;
+	int rookDifrerence = whiteRooks - blackRooks;
+
 	int whitePawnSecond = BitBoard::PieceCount(play->playBitBoard->whitePawns & BitBoard::SECONDCOLUMN);
 	int whitePawnThird = BitBoard::PieceCount(play->playBitBoard->whitePawns & BitBoard::THIRDCOLUMN);
 	int whitePawnFourth= BitBoard::PieceCount(play->playBitBoard->whitePawns & BitBoard::FOURTHCOLUMN);
@@ -35,7 +45,7 @@ int Evaluation::EvaluateScore( Play* play )
 		(whitePawnFourth * 3) + (whitePawnFifth * 4) + (whitePawnSixth * 20) + 
 		(whitePawnSeventh * 30) + (whitePawnEighth * 50);
 
-	play->score = pawnFraction + 8 * (whiteCount - blackCount);
+	play->score = pawnFraction + 6 * totalPieceDifference + 3 * bishopDifference + 2 * rookDifrerence;
 
 	return play->score;
 }
